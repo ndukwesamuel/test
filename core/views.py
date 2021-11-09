@@ -6,47 +6,73 @@ from core.models import blog
 from core.forms import *
 
 
-def home(request):
+# def home(request):
+#     blogs = blog.objects.all()
+#     context = {
+#         'blogs':blogs
+#     } 
+#     return render(request, 'index.html', context)
 
-    blogs = blog.objects.all()
+# classbase version of home
 
-    context = {
-        'blogs':blogs
-    } 
-
-    return render(request, 'index.html', context)
+# class home(generic.TemplateView):
+#     template_name = 'index.html'
 
 
-def blogDetail(request, pk):
-    Detail = blog.objects.get(id=pk)
-    # print(Detail)
+class home(generic.ListView):
+    template_name = 'index.html'
+    context_object_name = 'blogs'
 
-    context = {
-        "Detail":Detail
-    }
-    return render(request, "blogdetail.html", context)
+    def get_queryset(self):
+        queryset =blog.objects.all()
+        return queryset
 
-def createBlog(request):
-    form = BlogForms(request.POST or None)
 
-    if form.is_valid():
-        form.save()
-        return redirect("core:home")
-        print(form)
+class blogDetail(generic.DetailView):
+    template_name = 'blogdetail.html'
+    queryset = blog.objects.all()
+    context_object_name = "Detail"
 
-    context = {"form": form}
 
-    return render(request, 'createblog.html' , context )
 
-def updateBlog(request, pk):
-    blogList = blog.objects.get(id=pk)
-    form = BlogForms(request.POST or None, instance=blogList)
-    if form.is_valid():
-        form.save()
-        return redirect("core:home")
-    context = {"form":form}
 
-    return render(request, "update.html", context)
+# def createBlog(request):
+#     form = BlogForms(request.POST or None)
+
+#     if form.is_valid():
+#         form.save()
+#         return redirect("core:home")
+#         print(form)
+
+#     context = {"form": form}
+
+#     return render(request, 'createblog.html' , context )
+
+class createBlog(generic.CreateView):
+    template_name = "createblog.html"
+    form_class = BlogForms
+
+    def get_success_url(self):
+        return reverse("core:home")
+
+# def updateBlog(request, pk):
+#     blogList = blog.objects.get(id=pk)
+#     form = BlogForms(request.POST or None, instance=blogList)
+#     if form.is_valid():
+#         form.save()
+#         return redirect("core:home")
+#     context = {"form":form}
+
+#     return render(request, "update.html", context)
+
+
+class updateBlog(generic.UpdateView):
+    template_name = "update.html"
+    form_class = BlogForms
+    queryset = blog.objects.all()
+
+    def get_success_url(self):
+        return reverse("core:home")
 
 
 def blogDelete(request, pk):

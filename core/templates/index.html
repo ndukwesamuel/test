@@ -10,7 +10,7 @@
 
     {% for i in blogs %}
 
-        <h1> <a href=" {% url 'core:blogDetail' i.id   %}"> {{i.name}} </a> </h1>
+        <h1> <a href=" {% url 'core:blogDetail' pk=i.pk   %}"> {{i.title}} </a> </h1>
         <h1> {{i.title}}</h1>
         <p>{{i.body| slice:":200"}}</p>
 
