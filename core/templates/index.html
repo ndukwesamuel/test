@@ -1,0 +1,25 @@
+
+{% extends "base.html" %}
+    {% block content %}
+
+
+    <h1> Landing page</h1>
+
+
+<div class="b1">
+
+    {% for i in blogs %}
+
+        <h1> <a href=" {% url 'core:blogDetail' i.id   %}"> {{i.name}} </a> </h1>
+        <h1> {{i.title}}</h1>
+        <p>{{i.body| slice:":200"}}</p>
+
+    {% endfor%}
+
+</div>
+
+
+    {% endblock content%}
+
+
+    
